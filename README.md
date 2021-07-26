@@ -1,6 +1,6 @@
-# RHI-Challenge
-The Challenge of RHI Magnesita has been done and the code is available at (https://github.com/m-r-tanha/RHI-Challenge/blob/main/RHI%20Challenge.py).
-To implement it the below items have been followed and some techniques and methods have been used. 
+# Challenge
+#
+#
 
 ## Project Steps
 1. **Data preparation**
