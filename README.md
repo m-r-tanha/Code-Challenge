@@ -279,7 +279,7 @@ plt.legend(loc='upper left')
 
 ```
 
-![image](https://github.com/m-r-tanha/RHI-Challenge/blob/main/X_Test2.png)
+![image](https://github.com/m-r-tanha/Code-Challenge/blob/main/X_Test2.png)
 
 
 # Suggestion for next Steps/Further Improvements
