@@ -193,21 +193,28 @@ class DataPrepration:
 class XGBoost_Train_Predict:
     ''' In this Class, th eModel has been trained with XGBoost method'''
     
-    def __init__(self, X_train, X_test, Y_train, Y_test: Dataframe):
+    def __init__(self, X, Y, X_train, X_test, Y_train, Y_test: Dataframe):
+        self.X = X
+        self.Y = Y
         self.X_train = X_train
         self.X_test = X_test
         self.Y_train = Y_train
         self.Y_test = Y_test
-
+    
     def Model_Fit (cls, X_train,  Y_train):
 
         xgb_r = xg.XGBRegressor(objective ='reg:linear',
-                          n_estimators = 360, seed = 123)
+                          n_estimators = 360, seed = 123,verbosity = 0)
         pipeline = Pipeline(steps=[('normalize', MinMaxScaler()), ('model', xgb_r)])
         model = TransformedTargetRegressor(regressor=pipeline, transformer=MinMaxScaler())
         model.fit(cls.X_train, cls.Y_train)
         return model
-
+    def Evaluate (cls, X, Y):
+        from sklearn.model_selection import KFold
+        from sklearn.model_selection import cross_val_score
+        kfold = KFold(n_splits=10, random_state=None)
+        results = cross_val_score(model, X, Y, cv=kfold)
+        print("Accuracy: %.2f%% (%.2f%%)" % (results.mean()*100, results.std()*100))
     def Model_Predict(cls, X_test, model):
 
         prediction_test = model.predict(cls.X_test)
@@ -215,7 +222,9 @@ class XGBoost_Train_Predict:
 
 
 #%%
-
+# =============================================================================
+# 
+# =============================================================================
 # Read and load the Feature and Target Data        
 raw_path = r"C:\1 Research\Interview\Braincourt 2021.06\challange\md_raw_dataset.csv"
 target_path = r"C:\1 Research\Interview\Braincourt 2021.06\challange\md_target_dataset.csv"
@@ -262,9 +271,12 @@ X = X.iloc[:,0:-1]
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.015, random_state=10)
 
 # Define XGBoost from Class of XGBoost_Train_Predict
-XGB = XGBoost_Train_Predict(X_train, X_test, Y_train, Y_test)
+XGB = XGBoost_Train_Predict(X, Y, X_train, X_test, Y_train, Y_test)
+
 # Create Model based on Train Data
+
 model = XGB.Model_Fit(X_train,  Y_train)
+
 # Predict X_Test
 prediction_test = XGB.Model_Predict(X_test, model)
 # Plot the Acual (Y_Test) and Predicted values
@@ -275,4 +287,5 @@ plt.plot(np.arange(Y_test.shape[0]),np.array(prediction_test),
         label='Predicted Values')
 plt.legend(loc='upper left')
 plt.show()
-
+# Evaluate the Algorithm and show Accuracy 
+XGB.Evaluate(X,Y)
