@@ -50,10 +50,12 @@ class DataPrepration:
         df_target = pd.read_csv(self. target_path,  delimiter=';')
         df_raw.rename(columns={'Unnamed: 0': 'index'}, inplace=True)
         return df_raw, df_target
-
+    # =========================================================================
+    #     Establish a correspondence Between Raw and Target
+    # =========================================================================
     def Mapping_Raw_to_Target(self, df_raw, df_target, col1, col2):
         
-        ''' Raw and Target dataset are not matched one-to one correspondence
+        ''' Raw and Target dataset are not matched one-to one correspondence.
             By combination of index and groups in Raw and Target dataset, 
             a new Key has been created, as Index_Groups to map and link 
             the Target to the Raw data.'''
@@ -62,7 +64,7 @@ class DataPrepration:
         df_raw[col2].astype(float) #Raw Group
         df_target[col1].astype(float) # Target Index
         df_target[col2].astype(float) #Target Group
-        
+       
         # 
         df_raw.insert (2,'Index_group', 
                        [(str(df_raw.loc[i][col1].astype(int)) + '_' +
@@ -89,7 +91,9 @@ class DataPrepration:
         for col in col_to_del:
             df.pop(col)
         return df           
-   
+    # =============================================================================
+    #   To Unify time feature 
+    # =============================================================================
     def Unifying_timestamp_col(self, df, col_to_convert):
         ''' Unifying all types of Date and time to %d/%m/%Y %H:%M
             in this part the Regex has been used to find the different types of Date time'''
@@ -150,13 +154,12 @@ class DataPrepration:
     # KNN Imputer
     # =============================================================================
     def KNN_Imputer(self, df):
-        ''' Replacing NAN (missed) values with 
+        ''' Replacing NAN (missing) values with 
             reasonable data with KNN Algorithm.'''
         imputer = KNNImputer() # fit on the dataset
         imputer.fit(df) 
         X = imputer.transform(df)  # transform the dataset
         return X    
-
     # =============================================================================
     # Remove Columns That Have A Low Variance
     # =============================================================================      
@@ -169,11 +172,13 @@ class DataPrepration:
         X_sel = transform.fit_transform(df)  # transform the input data
         X = pd.DataFrame(X_sel)
         return X
-# =============================================================================
-# Final Projext run on X_test
-# =============================================================================
 
 #%%
+# =============================================================================
+# =============================================================================
+# #                            XGBoost Class
+# =============================================================================
+# =============================================================================
 class XGBoost_Train_Predict:
     ''' In this Class, th eModel has been trained with XGBoost method'''
     
@@ -204,10 +209,9 @@ class XGBoost_Train_Predict:
         prediction_test = model.predict(cls.X_test)
         return prediction_test
 
-
 #%%
 # =============================================================================
-# 
+#  Main Project
 # =============================================================================
 # Read and load the Feature and Target Data        
 raw_path = r"C:\1 Research\Interview\Braincourt 2021.06\challange\md_raw_dataset.csv"
