@@ -63,13 +63,7 @@ class DataPrepration:
             By combination of index and groups in Raw and Target dataset, 
             a new Key has been created, as Index_Groups to map and link 
             the Target to the Raw data.'''
-         
-#        df_raw[col1].astype(float) # Raw Index
-#        df_raw[col2].astype(float) #Raw Group
-#        df_target[col1].astype(float) # Target Index
-#        df_target[col2].astype(float) #Target Group
-#       
-        # 
+        # Insert the index_Group as primary Key in Raw and Target datasets
         df_raw.insert (2,'Index_group', 
                        [(str(df_raw.loc[i][col1].astype(int)) + '_' +
                          str(df_raw.loc[i][col2].astype(int))) 
